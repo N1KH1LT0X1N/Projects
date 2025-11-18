@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ../TicTacToe:/projects/TicTacToe:ro
+      - ../minesweeper:/projects/minesweeper:ro
+      - ../degrees:/projects/degrees:ro
+      - ../knights:/projects/knights:ro
+      - ../nim:/projects/nim:ro
+      - ../parser:/projects/parser:ro
+      - ../shopping:/projects/shopping:ro
+      - ../heredity:/projects/heredity:ro
+      - ../pagerank:/projects/pagerank:ro
+      - ../crossword:/projects/crossword:ro
+      - ../attention:/projects/attention:ro
+      - ../traffic:/projects/traffic:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    command: npm run dev
+
+networks:
+  default:
+    name: cs50-ai-network

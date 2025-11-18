@@ -116,8 +116,8 @@ export class APIClient {
     return this.request('/api/pagerank/corpora')
   }
 
-  async calculatePageRank(corpusId: string, samples: number = 10000, damping: float = 0.85) {
-    return this.request(`/api/pagerank/calculate/${corpusId}`, {
+  async calculatePageRank(corpusId: string, samples: number = 10000, damping: number = 0.85) {
+    return this.request(`/api/pagerank/calculate/${corpusId}?samples=${samples}&damping=${damping}`, {
       method: 'POST',
     })
   }
